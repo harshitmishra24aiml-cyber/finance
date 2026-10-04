@@ -1,0 +1,15 @@
+{
+  "currency": "INR",
+  "stockout_penalty_pct_of_order_value_per_day_late": 0.04,
+  "human_approval_spend_limit_inr": 150000,
+  "min_extraction_confidence": 0.7,
+  "rfq_response_timeout_minutes": 10,
+  "max_replans_before_human_escalation": 2,
+  "demo_time_compression": "Deadlines are measured in minutes during the demo instead of hours.",
+  "demo_scenario": {
+    "sku": "SKU-101",
+    "supplier_id": "SUP-P1",
+    "delay_days": 12,
+    "sample_notice_file": "data/sample_delay_notice.txt"
+  }
+}

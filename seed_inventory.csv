@@ -1,0 +1,9 @@
+sku,description,on_hand,daily_burn,reorder_point,primary_supplier_id,unit_cost_inr
+SKU-101,BLDC Fan Motor 12V,600,100,300,SUP-P1,410
+SKU-102,HEPA H13 Filter Cartridge,1400,90,500,SUP-P1,260
+SKU-103,Control PCB v2,950,60,400,SUP-P2,185
+SKU-104,Particulate Sensor Module,780,45,300,SUP-P2,140
+SKU-105,ABS Housing Shell,2100,120,800,SUP-P2,95
+SKU-106,24V Power Adapter,1250,70,500,SUP-P3,120
+SKU-107,Retail Packaging Box,3400,150,1500,SUP-P3,18
+SKU-108,Wi-Fi Module ESP32,820,40,300,SUP-P3,210

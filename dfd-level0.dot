@@ -1,0 +1,22 @@
+digraph DFD0 {
+  graph [rankdir=LR, bgcolor="white", pad=0.4, nodesep=0.9, ranksep=1.6, fontname="Helvetica",
+         label="ReRoute: Data Flow Diagram, Level 0 (Context)", labelloc=t, fontsize=22];
+  node  [fontname="Helvetica", fontsize=13];
+  edge  [fontname="Helvetica", fontsize=11, color="#475569", fontcolor="#1e293b", penwidth=1.4];
+
+  // external entities
+  SUP  [label="Primary\nSupplier",       shape=box, style="filled", fillcolor="#e0f2fe", color="#0369a1", width=1.6, height=0.9];
+  ALT  [label="Alternate\nSuppliers",    shape=box, style="filled", fillcolor="#e0f2fe", color="#0369a1", width=1.6, height=0.9];
+  OPS  [label="Ops / Procurement\nManager", shape=box, style="filled", fillcolor="#fef3c7", color="#b45309", width=1.8, height=0.9];
+  CUS  [label="Customers",              shape=box, style="filled", fillcolor="#dcfce7", color="#15803d", width=1.6, height=0.9];
+
+  // the single process
+  SYS  [label="0\nReRoute\nAutonomous\nDisruption Desk", shape=circle, style="filled", fillcolor="#fde7ee", color="#ea4b71", penwidth=2.5, width=2.4, fontsize=15];
+
+  SUP -> SYS [label="Delay notice\n(unstructured email)"];
+  SYS -> ALT [label="Request for quotation"];
+  ALT -> SYS [label="Quote / rejection\n(free-text reply)"];
+  SYS -> OPS [label="Approval request\n+ status / escalation"];
+  OPS -> SYS [label="Approve / reject"];
+  SYS -> CUS [label="Proactive delay\n& recovery update"];
+}

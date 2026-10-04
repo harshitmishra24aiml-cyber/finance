@@ -1,0 +1,336 @@
+{
+  "name": "ReRoute W3 - Executor",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## W3 Executor\nParallel RFQs, wait for replies, parse quotes, approval, PO, customer notices.",
+        "height": 120,
+        "width": 2700,
+        "color": 4
+      },
+      "id": "ec6c24c3-6ea1-40c3-a0b9-5aa1055c4beb",
+      "name": "Sticky 0",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "reroute-execute",
+        "options": {}
+      },
+      "id": "4f9d63be-7fa0-47f7-ae2d-f21f7482ac4a",
+      "name": "Plan Ready to Execute",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// TODO (build phase)\nreturn items;"
+      },
+      "id": "13cd78d1-2349-4e0e-bb09-34bcaa278802",
+      "name": "Split Into One RFQ per Supplier",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "c6177de0-76e9-4af0-9af8-fef2d00fdb27",
+      "name": "Send RFQ (parallel)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {}
+      },
+      "id": "14183c58-5bf1-49bd-8f9f-77e8e53f7f1c",
+      "name": "Wait for Supplier Reply (timeout 10 min)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "6884f7a2-3969-4996-bfba-d8ff3725d1a3",
+      "name": "LLM: Parse Quote",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        300
+      ],
+      "notes": "prompts/parse_quote.md",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// TODO (build phase)\nreturn items;"
+      },
+      "id": "77209ea3-b078-4303-b982-7f1325d5ae1c",
+      "name": "Compare Cost vs Stockout Penalty",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1300,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.over_limit }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "112c5971-e977-4ba8-b5dc-55fef18006bd",
+      "name": "Spend > Approval Limit?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "413825af-462a-4467-9398-9d4ed67150e9",
+      "name": "Telegram: Approval Card",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1820,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {}
+      },
+      "id": "b4348db4-b7e5-4336-a1f4-67447b9f9cda",
+      "name": "Wait for Human Approval",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2080,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "2321b8f0-c559-4733-913a-9a833e35a9a1",
+      "name": "Confirm PO with Supplier",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2340,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "314a4225-b1f2-4652-ae74-aa59ffb50850",
+      "name": "LLM + Send: Notify At-Risk Customers",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2600,
+        300
+      ],
+      "notes": "prompts/customer_notice.md",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "3ab431b7-4750-4498-bfb4-021d33d13cc0",
+      "name": "Log Actions + Reasoning",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2860,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Plan Ready to Execute": {
+      "main": [
+        [
+          {
+            "node": "Split Into One RFQ per Supplier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Into One RFQ per Supplier": {
+      "main": [
+        [
+          {
+            "node": "Send RFQ (parallel)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send RFQ (parallel)": {
+      "main": [
+        [
+          {
+            "node": "Wait for Supplier Reply (timeout 10 min)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Supplier Reply (timeout 10 min)": {
+      "main": [
+        [
+          {
+            "node": "LLM: Parse Quote",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM: Parse Quote": {
+      "main": [
+        [
+          {
+            "node": "Compare Cost vs Stockout Penalty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare Cost vs Stockout Penalty": {
+      "main": [
+        [
+          {
+            "node": "Spend > Approval Limit?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Spend > Approval Limit?": {
+      "main": [
+        [
+          {
+            "node": "Telegram: Approval Card",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Confirm PO with Supplier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram: Approval Card": {
+      "main": [
+        [
+          {
+            "node": "Wait for Human Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Human Approval": {
+      "main": [
+        [
+          {
+            "node": "Confirm PO with Supplier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirm PO with Supplier": {
+      "main": [
+        [
+          {
+            "node": "LLM + Send: Notify At-Risk Customers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM + Send: Notify At-Risk Customers": {
+      "main": [
+        [
+          {
+            "node": "Log Actions + Reasoning",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

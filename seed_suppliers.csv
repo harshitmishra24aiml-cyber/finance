@@ -1,0 +1,8 @@
+supplier_id,name,role,skus_covered,unit_price_inr,lead_time_days,reliability_score,min_order_qty,email
+SUP-P1,Orion Components Ltd,primary,SKU-101;SKU-102,410,7,0.92,200,orders@orion-components.example
+SUP-P2,Vega Electro Works,primary,SKU-103;SKU-104;SKU-105,185,6,0.90,300,sales@vega-electro.example
+SUP-P3,Nimbus Plastics,primary,SKU-106;SKU-107;SKU-108,62,5,0.94,500,desk@nimbus-plastics.example
+ALT-1,Kaveri Motor House,alternate,SKU-101;SKU-102,455,3,0.88,100,quotes@kaveri-motors.example
+ALT-2,Bharat Drives & Controls,alternate,SKU-101;SKU-103,478,2,0.81,50,rfq@bharat-drives.example
+ALT-3,Deccan Micro Systems,alternate,SKU-101;SKU-104;SKU-108,432,5,0.93,150,sales@deccan-micro.example
+ALT-4,Surya Industrial Supply,alternate,SKU-101;SKU-105;SKU-106;SKU-107,495,1,0.76,25,hello@surya-industrial.example

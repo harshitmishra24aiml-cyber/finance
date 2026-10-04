@@ -1,0 +1,21 @@
+order_id,customer,customer_email,sku,qty,promised_date,order_value_inr,priority
+ORD-2001,PureAir Appliances,procurement@pureair.example,SKU-101,150,2026-10-12,115000,high
+ORD-2002,CoolBreeze Mfg,buy@coolbreeze.example,SKU-101,120,2026-10-13,92000,medium
+ORD-2003,HomeNest Devices,ops@homenest.example,SKU-101,200,2026-10-14,154000,high
+ORD-2004,Zephyr Home Tech,supply@zephyr.example,SKU-101,100,2026-10-15,76000,medium
+ORD-2005,Aeris Living,orders@aeris.example,SKU-101,180,2026-10-16,138000,high
+ORD-2006,BlueLeaf Electricals,po@blueleaf.example,SKU-101,90,2026-10-18,68000,low
+ORD-2007,Metro Cooling Co,buy@metrocooling.example,SKU-101,160,2026-10-19,123000,medium
+ORD-2008,PureAir Appliances,procurement@pureair.example,SKU-102,300,2026-10-14,78000,medium
+ORD-2009,Aeris Living,orders@aeris.example,SKU-102,250,2026-10-17,65000,low
+ORD-2010,HomeNest Devices,ops@homenest.example,SKU-103,200,2026-10-13,37000,medium
+ORD-2011,Zephyr Home Tech,supply@zephyr.example,SKU-103,150,2026-10-16,27750,low
+ORD-2012,CoolBreeze Mfg,buy@coolbreeze.example,SKU-104,180,2026-10-15,25200,low
+ORD-2013,BlueLeaf Electricals,po@blueleaf.example,SKU-105,400,2026-10-14,38000,low
+ORD-2014,Metro Cooling Co,buy@metrocooling.example,SKU-105,350,2026-10-18,33250,low
+ORD-2015,PureAir Appliances,procurement@pureair.example,SKU-106,300,2026-10-15,36000,medium
+ORD-2016,Aeris Living,orders@aeris.example,SKU-106,250,2026-10-19,30000,low
+ORD-2017,HomeNest Devices,ops@homenest.example,SKU-107,900,2026-10-13,16200,low
+ORD-2018,Zephyr Home Tech,supply@zephyr.example,SKU-107,700,2026-10-17,12600,low
+ORD-2019,CoolBreeze Mfg,buy@coolbreeze.example,SKU-108,150,2026-10-14,31500,medium
+ORD-2020,BlueLeaf Electricals,po@blueleaf.example,SKU-108,120,2026-10-18,25200,low

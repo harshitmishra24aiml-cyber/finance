@@ -1,0 +1,217 @@
+{
+  "name": "ReRoute W1 - Intake",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## W1 Intake\nUnstructured supplier email in, structured case out.",
+        "height": 120,
+        "width": 1500,
+        "color": 4
+      },
+      "id": "1a45bbb2-5a87-4903-9beb-eb8b0c2c5d0e",
+      "name": "Sticky 0",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "reroute-intake",
+        "options": {}
+      },
+      "id": "08de81e0-b2b4-4769-a586-ca56d9514f46",
+      "name": "Delay Notice Received",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// TODO (build phase)\nreturn items;"
+      },
+      "id": "3ff12345-1ceb-4b33-90fb-627f8845e47c",
+      "name": "Normalize Email Text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "1bee1c38-7b2a-480d-93e1-8fde4bea2b42",
+      "name": "LLM: Extract Facts (JSON)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        300
+      ],
+      "notes": "prompts/extract_disruption.md",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// TODO (build phase)\nreturn items;"
+      },
+      "id": "e18bbea2-3c94-4f1f-b357-cd670fc961b5",
+      "name": "Validate Schema",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        780,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.confident }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "7a84edbe-eeb3-4067-af15-a6065a79e61d",
+      "name": "Confidence >= 0.7?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "79aed4d4-8156-4c96-b035-83344c735987",
+      "name": "Create Case (Supabase)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1300,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "3c2c2a14-31f1-4ffa-9015-9f516f2f44f0",
+      "name": "Trigger W2: Analyst Agent",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "9ffdf0d8-2b2b-481b-aa4b-ade1bd7b3f34",
+      "name": "Ask Human to Confirm (Telegram)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1300,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Delay Notice Received": {
+      "main": [
+        [
+          {
+            "node": "Normalize Email Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Email Text": {
+      "main": [
+        [
+          {
+            "node": "LLM: Extract Facts (JSON)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM: Extract Facts (JSON)": {
+      "main": [
+        [
+          {
+            "node": "Validate Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Schema": {
+      "main": [
+        [
+          {
+            "node": "Confidence >= 0.7?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confidence >= 0.7?": {
+      "main": [
+        [
+          {
+            "node": "Create Case (Supabase)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ask Human to Confirm (Telegram)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Case (Supabase)": {
+      "main": [
+        [
+          {
+            "node": "Trigger W2: Analyst Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

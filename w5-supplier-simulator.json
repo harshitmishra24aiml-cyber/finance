@@ -1,0 +1,147 @@
+{
+  "name": "ReRoute W5 - Supplier Simulator",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## W5 Supplier Simulator (demo only)\nLets the negotiation loop run without real suppliers.",
+        "height": 120,
+        "width": 1500,
+        "color": 4
+      },
+      "id": "245a39a1-ab3c-442c-94ab-c51e368c89eb",
+      "name": "Sticky 0",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "reroute-sim-rfq",
+        "options": {}
+      },
+      "id": "271d3604-2df8-4cba-acf5-466e23b4bec6",
+      "name": "RFQ Received",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// TODO (build phase)\nreturn items;"
+      },
+      "id": "fc839dc9-8e12-4f7e-8bf8-9dc64d66fadf",
+      "name": "Pick Persona: eager / slow / rejecting",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "7e0c7ffc-5f42-4ecb-8a2f-415bafa45fb4",
+      "name": "LLM: Write Reply in Persona",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        300
+      ],
+      "notes": "prompts/supplier_simulator.md",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {}
+      },
+      "id": "ae5ea99e-4d4a-488a-b509-396950c932b1",
+      "name": "Simulated Reply Delay",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "43d55083-2431-4f14-b655-c9c77cf1e0b2",
+      "name": "POST Reply to W3 Resume URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "RFQ Received": {
+      "main": [
+        [
+          {
+            "node": "Pick Persona: eager / slow / rejecting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick Persona: eager / slow / rejecting": {
+      "main": [
+        [
+          {
+            "node": "LLM: Write Reply in Persona",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM: Write Reply in Persona": {
+      "main": [
+        [
+          {
+            "node": "Simulated Reply Delay",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simulated Reply Delay": {
+      "main": [
+        [
+          {
+            "node": "POST Reply to W3 Resume URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

@@ -1,0 +1,55 @@
+digraph DFD1 {
+  graph [rankdir=LR, bgcolor="white", pad=0.4, nodesep=0.7, ranksep=1.3, fontname="Helvetica",
+         label="ReRoute: Data Flow Diagram, Level 1", labelloc=t, fontsize=22, splines=true];
+  node  [fontname="Helvetica", fontsize=12];
+  edge  [fontname="Helvetica", fontsize=10, color="#475569", fontcolor="#1e293b", penwidth=1.3];
+
+  // external entities
+  SUP [label="Primary\nSupplier",    shape=box, style="filled", fillcolor="#e0f2fe", color="#0369a1"];
+  ALT [label="Alternate\nSuppliers", shape=box, style="filled", fillcolor="#e0f2fe", color="#0369a1"];
+  OPS [label="Ops Manager",          shape=box, style="filled", fillcolor="#fef3c7", color="#b45309"];
+  CUS [label="Customers",            shape=box, style="filled", fillcolor="#dcfce7", color="#15803d"];
+
+  // processes
+  P1 [label="1.0\nExtract\nDisruption Facts\n(LLM)",        shape=ellipse, style="filled", fillcolor="#fde7ee", color="#ea4b71", penwidth=2];
+  P2 [label="2.0\nAnalyze Impact\n& Choose Strategy\n(AI Agent + tools)", shape=ellipse, style="filled", fillcolor="#fde7ee", color="#ea4b71", penwidth=2];
+  P3 [label="3.0\nSource &\nNegotiate\n(RFQs, parse quotes)", shape=ellipse, style="filled", fillcolor="#fde7ee", color="#ea4b71", penwidth=2];
+  P4 [label="4.0\nDecide &\nExecute\n(PO, notices)",         shape=ellipse, style="filled", fillcolor="#fde7ee", color="#ea4b71", penwidth=2];
+  P5 [label="5.0\nMonitor, Verify\n& Follow Up\n(watchdog)",   shape=ellipse, style="filled", fillcolor="#fde7ee", color="#ea4b71", penwidth=2];
+
+  // data stores
+  D1 [label="D1  Cases",        shape=cylinder, style="filled", fillcolor="#f1f5f9", color="#334155"];
+  D2 [label="D2  Inventory",    shape=cylinder, style="filled", fillcolor="#f1f5f9", color="#334155"];
+  D3 [label="D3  Orders",       shape=cylinder, style="filled", fillcolor="#f1f5f9", color="#334155"];
+  D4 [label="D4  Suppliers",    shape=cylinder, style="filled", fillcolor="#f1f5f9", color="#334155"];
+  D5 [label="D5  RFQs & Quotes", shape=cylinder, style="filled", fillcolor="#f1f5f9", color="#334155"];
+  D6 [label="D6  Action Log",    shape=cylinder, style="filled", fillcolor="#f1f5f9", color="#334155"];
+
+  // flows
+  SUP -> P1 [label="Delay notice"];
+  P1  -> D1 [label="Structured case"];
+  D1  -> P2 [label="Case facts"];
+  D2  -> P2 [label="Stock, burn rate"];
+  D3  -> P2 [label="Open orders"];
+  D4  -> P2 [label="Alternates"];
+  P2  -> D1 [label="Impact + plan"];
+  D1  -> P3 [label="Plan"];
+  D4  -> P3 [label="Supplier terms"];
+  P3  -> ALT [label="RFQs (parallel)"];
+  ALT -> P3 [label="Replies"];
+  P3  -> D5 [label="Parsed quotes"];
+  D5  -> P4 [label="Best quote"];
+  P4  -> OPS [label="Approval request\n(if over limit)"];
+  OPS -> P4 [label="Decision"];
+  P4  -> CUS [label="Customer updates"];
+  P4  -> D6 [label="Actions + reasoning"];
+  P4  -> D1 [label="Status: executing"];
+  D1  -> P5 [label="Open cases"];
+  D5  -> P5 [label="RFQ status"];
+  D2  -> P5 [label="Updated stock"];
+  P5  -> P2 [label="Re-plan on rejection", style=dashed, color="#ea4b71", fontcolor="#ea4b71"];
+  P5  -> P3 [label="Chase non-responders", style=dashed, color="#ea4b71", fontcolor="#ea4b71"];
+  P5  -> OPS [label="Escalation", style=dashed, color="#b45309", fontcolor="#b45309"];
+  P5  -> D1 [label="Close case"];
+  P5  -> D6 [label="Verification result"];
+}

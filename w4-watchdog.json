@@ -1,0 +1,272 @@
+{
+  "name": "ReRoute W4 - Watchdog",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## W4 Watchdog (scheduled)\nVerifies outcomes, chases silence, re-plans on rejection, escalates, closes.",
+        "height": 120,
+        "width": 2100,
+        "color": 4
+      },
+      "id": "492cd537-eda5-426e-beea-651ce28ca8c3",
+      "name": "Sticky 0",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "a29dc784-8813-46b0-a752-740fecf77f7c",
+      "name": "Every 2 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "97c19cea-96e3-4b5d-bcb8-7b2e961d4c41",
+      "name": "Get Open Cases",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// TODO (build phase)\nreturn items;"
+      },
+      "id": "54593a7d-abfd-43a9-8d66-48467005d7dc",
+      "name": "Check Each Case",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.verified }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "324e3e1e-bc2a-4608-9174-f289680ca9eb",
+      "name": "PO confirmed and stock covers orders?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        780,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "f62d3466-5a74-426d-90b5-95a7c132921f",
+      "name": "Close Case + Record Metrics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.rejected }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "852ec19e-8742-413a-90eb-6c61ff16e9ac",
+      "name": "RFQ rejected?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        460
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "88faabef-7a0c-41c9-8e52-b672eaed8c3e",
+      "name": "Re-plan: call W2 with new constraints",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1300,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.overdue }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "1e2be89d-4b44-471a-8ba8-d10608badb29",
+      "name": "Deadline missed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1300,
+        580
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ef0c117d-97ef-4fac-9835-a3a46ffdfde1",
+      "name": "Escalate to Human (Telegram)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        480
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "9792c386-dad9-4fe5-bbf8-e6d597c0dbac",
+      "name": "Chase Non-responders",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        700
+      ]
+    }
+  ],
+  "connections": {
+    "Every 2 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Get Open Cases",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Open Cases": {
+      "main": [
+        [
+          {
+            "node": "Check Each Case",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Each Case": {
+      "main": [
+        [
+          {
+            "node": "PO confirmed and stock covers orders?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PO confirmed and stock covers orders?": {
+      "main": [
+        [
+          {
+            "node": "Close Case + Record Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "RFQ rejected?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RFQ rejected?": {
+      "main": [
+        [
+          {
+            "node": "Re-plan: call W2 with new constraints",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Deadline missed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deadline missed?": {
+      "main": [
+        [
+          {
+            "node": "Escalate to Human (Telegram)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chase Non-responders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

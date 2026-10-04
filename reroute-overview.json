@@ -1,0 +1,419 @@
+{
+  "name": "ReRoute - System Overview",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## ReRoute: autonomous supply-disruption desk\nUnstructured email in. Closed-loop recovery out.",
+        "height": 110,
+        "width": 2650,
+        "color": 4
+      },
+      "id": "a42c0f83-ddfe-4824-aef7-27b7c8f02011",
+      "name": "Sticky 0",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 1. Understand",
+        "height": 560,
+        "width": 400,
+        "color": 5
+      },
+      "id": "c5185d3e-f0cc-4669-8fda-85f5a17ab87b",
+      "name": "Sticky 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 2. Reason and decide",
+        "height": 560,
+        "width": 420,
+        "color": 4
+      },
+      "id": "09c44fb3-c882-4b8f-9d31-2801c2f10a76",
+      "name": "Sticky 2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        380,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 3. Act",
+        "height": 560,
+        "width": 1250,
+        "color": 6
+      },
+      "id": "dd15772a-19dd-4f25-971f-5de5d1942a34",
+      "name": "Sticky 3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        820,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 4. Monitor and follow up",
+        "height": 560,
+        "width": 520,
+        "color": 3
+      },
+      "id": "9c1aece1-690a-4a91-a1e7-cb918447edd8",
+      "name": "Sticky 4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2090,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "reroute-intake",
+        "options": {}
+      },
+      "id": "c8c362d6-fbed-45d6-8c96-a93dc063a15f",
+      "name": "Supplier Delay Email",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "8848dd05-66f9-4ef0-b524-72593cadbd2b",
+      "name": "LLM: Extract Facts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        210,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "c4d1b021-6700-427b-a83d-223e5bc874b8",
+      "name": "AI Agent: Impact Analyst",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ae5db76e-ef27-47a1-a490-e217ff6235fb",
+      "name": "Tools: orders, stock, alternates",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        440,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.needs_sourcing }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "85254293-d3d5-4ac3-aefb-689bfc1655a2",
+      "name": "Strategy: source alternates?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        650,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "f564a9fa-5817-4314-bdb7-defe868104cc",
+      "name": "Send RFQs (parallel)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        860,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {}
+      },
+      "id": "93cd2ddc-661f-48a4-97c2-f473b6b814a9",
+      "name": "Wait for Replies",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1070,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "325f9561-a6c0-44b8-bec7-de8789892de8",
+      "name": "LLM: Parse Quotes",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1280,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.over_limit }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "b766a3dd-c8db-4530-bc87-a76e9261f01f",
+      "name": "Spend > limit?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1490,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "6c598571-18af-44bb-ab24-c842bc222e74",
+      "name": "Telegram Approval",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1700,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "92785026-84fb-42a6-bb97-dd16bbae53fe",
+      "name": "Confirm PO + Notify Customers",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1910,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "839c94ce-1f14-4b95-abc5-87f1e633a701",
+      "name": "Watchdog Every 2 Min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        2130,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "d728687d-c938-4892-a558-f3bd57ec8b06",
+      "name": "Verify / Re-plan / Escalate",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2390,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Supplier Delay Email": {
+      "main": [
+        [
+          {
+            "node": "LLM: Extract Facts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM: Extract Facts": {
+      "main": [
+        [
+          {
+            "node": "AI Agent: Impact Analyst",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent: Impact Analyst": {
+      "main": [
+        [
+          {
+            "node": "Strategy: source alternates?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Tools: orders, stock, alternates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Strategy: source alternates?": {
+      "main": [
+        [
+          {
+            "node": "Send RFQs (parallel)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send RFQs (parallel)": {
+      "main": [
+        [
+          {
+            "node": "Wait for Replies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Replies": {
+      "main": [
+        [
+          {
+            "node": "LLM: Parse Quotes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM: Parse Quotes": {
+      "main": [
+        [
+          {
+            "node": "Spend > limit?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Spend > limit?": {
+      "main": [
+        [
+          {
+            "node": "Telegram Approval",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Confirm PO + Notify Customers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Approval": {
+      "main": [
+        [
+          {
+            "node": "Confirm PO + Notify Customers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Watchdog Every 2 Min": {
+      "main": [
+        [
+          {
+            "node": "Verify / Re-plan / Escalate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify / Re-plan / Escalate": {
+      "main": [
+        [
+          {
+            "node": "AI Agent: Impact Analyst",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

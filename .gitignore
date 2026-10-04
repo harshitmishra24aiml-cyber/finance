@@ -1,0 +1,9 @@
+.env
+*.env
+node_modules/
+.n8n/
+*.log
+.DS_Store
+__pycache__/
+# n8n credential exports must never be committed
+credentials*.json

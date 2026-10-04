@@ -1,0 +1,249 @@
+{
+  "name": "ReRoute W2 - Analyst Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## W2 Analyst Agent\nTool-calling LLM computes impact and picks a strategy.",
+        "height": 120,
+        "width": 1500,
+        "color": 4
+      },
+      "id": "7381aaf9-f95b-4a70-beda-59886fb4c4fb",
+      "name": "Sticky 0",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "reroute-analyze",
+        "options": {}
+      },
+      "id": "de067241-3678-4ad3-86e3-4a240d8cb5c4",
+      "name": "Case Ready for Analysis",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "d516abb0-710d-44e5-95d3-8da1ad04c88f",
+      "name": "AI Agent: Impact Analyst",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        260,
+        300
+      ],
+      "notes": "Swap for the n8n AI Agent node during the build. prompts/analyst_agent.md",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {},
+      "id": "df07a4ba-f1ba-4d91-b9e5-850e802b7d60",
+      "name": "Tool: get_inventory",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        130,
+        520
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "67b174ee-e22b-4645-aeba-c56293685a7f",
+      "name": "Tool: get_orders_for_sku",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        270,
+        520
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "0179cfce-caec-4f7a-8591-6a0a344ab0a0",
+      "name": "Tool: get_alternates",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        410,
+        520
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "8a1af8ef-a5df-4cd6-8799-0d114824617e",
+      "name": "Tool: calc_stockout",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        550,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Agent tools",
+        "height": 220,
+        "width": 600,
+        "color": 6
+      },
+      "id": "3dc7a165-dc87-4cf1-a41c-60a92ccac252",
+      "name": "Sticky 7",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        100,
+        470
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// TODO (build phase)\nreturn items;"
+      },
+      "id": "576c85be-f648-4e52-b00e-a8d13217f648",
+      "name": "Parse and Validate Plan JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.com/TODO",
+        "options": {}
+      },
+      "id": "c5f35b5d-dad1-420e-945a-61422b531cd3",
+      "name": "Save Impact + Plan to Case",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.needs_sourcing }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "3f5e1f61-244a-4039-8b9c-0e2510a4479f",
+      "name": "Strategy needs sourcing?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1160,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "80aa0c3b-f88c-4d59-a6f9-67d675b2198c",
+      "name": "Trigger W3: Executor",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1420,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "b6ba31b7-e63a-45d1-9374-d48020451865",
+      "name": "Notify Customers Only",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1420,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "Case Ready for Analysis": {
+      "main": [
+        [
+          {
+            "node": "AI Agent: Impact Analyst",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent: Impact Analyst": {
+      "main": [
+        [
+          {
+            "node": "Parse and Validate Plan JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse and Validate Plan JSON": {
+      "main": [
+        [
+          {
+            "node": "Save Impact + Plan to Case",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Impact + Plan to Case": {
+      "main": [
+        [
+          {
+            "node": "Strategy needs sourcing?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Strategy needs sourcing?": {
+      "main": [
+        [
+          {
+            "node": "Trigger W3: Executor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify Customers Only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}

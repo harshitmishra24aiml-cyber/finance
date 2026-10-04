@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReRoute Dashboard</title>
+<style>
+  :root{
+    --bg:#f5f6f8; --card:#ffffff; --ink:#1b2430; --muted:#6b7686; --line:#e3e7ed;
+    --brand:#ea4b71; --ok:#1f9d63; --warn:#d98b0b; --bad:#d6454d; --info:#2f6fdb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+  header{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;background:var(--card);border-bottom:1px solid var(--line)}
+  header h1{font-size:18px;margin:0}
+  header h1 span{color:var(--brand)}
+  .badge{font-size:12px;padding:3px 10px;border-radius:999px;background:#fff3cd;color:#7a5a00;border:1px solid #f0dc9a}
+  main{max-width:1200px;margin:0 auto;padding:20px 24px 40px;display:grid;gap:16px}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .kpi .v{font-size:26px;font-weight:700}
+  .kpi .l{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  .kpi .d{font-size:12px;color:var(--ok)}
+  .grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+  h2{font-size:14px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .case-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .pill{font-size:12px;padding:2px 9px;border-radius:999px;font-weight:600}
+  .pill.ok{background:#e4f6ec;color:var(--ok)} .pill.warn{background:#fdf1d9;color:var(--warn)}
+  .pill.bad{background:#fbe5e6;color:var(--bad)} .pill.info{background:#e3edfc;color:var(--info)}
+  ol.timeline{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+  ol.timeline li{position:relative;padding:0 0 14px 18px}
+  ol.timeline li::before{content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--info)}
+  ol.timeline li.done::before{background:var(--ok);border-color:var(--ok)}
+  ol.timeline li.fail::before{background:var(--bad);border-color:var(--bad)}
+  ol.timeline li.wait::before{border-color:var(--warn)}
+  .t{color:var(--muted);font-size:12px}
+  .why{color:var(--muted);font-size:13px}
+  table{width:100%;border-collapse:collapse}
+  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);font-size:13px}
+  th{color:var(--muted);font-weight:600;font-size:12px}
+  .approve{display:flex;gap:8px;margin-top:10px}
+  button{font:inherit;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer}
+  button.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  footer{color:var(--muted);font-size:12px;text-align:center}
+  @media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1><span>Re</span>Route &middot; Disruption Desk</h1>
+  <span class="badge">Mockup with demo data</span>
+</header>
+
+<main>
+  <section class="kpis">
+    <div class="card kpi"><div class="l">Email to decision</div><div class="v">74 s</div><div class="d">vs ~3 hours manual</div></div>
+    <div class="card kpi"><div class="l">Orders protected</div><div class="v">7 / 7</div><div class="d">0 missed promise dates</div></div>
+    <div class="card kpi"><div class="l">Revenue protected</div><div class="v">₹7.66 L</div><div class="d">penalty avoided ₹1.1 L</div></div>
+    <div class="card kpi"><div class="l">Human touches</div><div class="v">1</div><div class="d">approval above ₹1.5 L limit</div></div>
+  </section>
+
+  <section class="grid2">
+    <div class="card">
+      <div class="case-head">
+        <h2 style="margin:0">Case CASE-0042 &middot; SKU-101 BLDC Fan Motor</h2>
+        <span class="pill ok">Closed &middot; verified</span>
+      </div>
+      <p class="why">Orion Components: container held at port, about 12 days delay. Stockout in 6 days, 7 orders at risk, ₹7.66 L exposure.</p>
+      <ol class="timeline">
+        <li class="done"><b>Notice received and parsed</b> <span class="t">00:00</span><div class="why">Delay 12 days, partial air lot of 150 offered, confidence 0.94</div></li>
+        <li class="done"><b>Agent computed impact</b> <span class="t">00:18</span><div class="why">Stockout 2026-10-10. Penalty if unhandled about ₹1.1 L. Strategy: alternate source</div></li>
+        <li class="done"><b>RFQs sent in parallel</b> <span class="t">00:31</span><div class="why">Kaveri Motor House, Deccan Micro Systems, Bharat Drives</div></li>
+        <li class="fail"><b>Kaveri rejected</b> <span class="t">00:52</span><div class="why">"Capacity fully booked this month"</div></li>
+        <li class="done"><b>Watchdog re-planned</b> <span class="t">01:02</span><div class="why">Chose Deccan Micro: ₹432/unit, 5 days, reliability 0.93</div></li>
+        <li class="wait"><b>Approval requested (Telegram)</b> <span class="t">01:14</span><div class="why">Spend ₹1.73 L exceeds ₹1.5 L limit. Approved by ops manager</div></li>
+        <li class="done"><b>PO confirmed, 7 customers notified</b> <span class="t">01:40</span></li>
+        <li class="done"><b>Verified: stock now covers all orders</b> <span class="t">02:05</span><div class="why">Case closed automatically</div></li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>Quotes compared</h2>
+      <table>
+        <tr><th>Supplier</th><th>Unit ₹</th><th>Lead</th><th>Result</th></tr>
+        <tr><td>Kaveri Motor House</td><td>–</td><td>–</td><td><span class="pill bad">Rejected</span></td></tr>
+        <tr><td>Deccan Micro Systems</td><td>432</td><td>5 d</td><td><span class="pill ok">Selected</span></td></tr>
+        <tr><td>Bharat Drives</td><td>478</td><td>2 d</td><td><span class="pill info">Backup</span></td></tr>
+      </table>
+      <h2 style="margin-top:18px">Orders at risk</h2>
+      <table>
+        <tr><th>Order</th><th>Customer</th><th>Promise</th><th>Status</th></tr>
+        <tr><td>ORD-2001</td><td>PureAir</td><td>12 Oct</td><td><span class="pill ok">Protected</span></td></tr>
+        <tr><td>ORD-2002</td><td>CoolBreeze</td><td>13 Oct</td><td><span class="pill ok">Protected</span></td></tr>
+        <tr><td>ORD-2003</td><td>HomeNest</td><td>14 Oct</td><td><span class="pill ok">Protected</span></td></tr>
+        <tr><td>ORD-2004</td><td>Zephyr</td><td>15 Oct</td><td><span class="pill ok">Protected</span></td></tr>
+      </table>
+      <div class="approve"><button class="primary">Approve</button><button>Reject</button></div>
+    </div>
+  </section>
+  <footer>All figures on this page are demo data for the mockup. In the build, it reads live from Supabase.</footer>
+</main>
+</body>
+</html>

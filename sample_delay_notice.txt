@@ -1,0 +1,17 @@
+From: Anil Rao <anil.rao@orion-components.example>
+To: Procurement <orders@reroute-demo.example>
+Subject: RE: PO 7741 - update on dispatch
+
+Hi team,
+
+Quick heads up on the BLDC motors for PO 7741. The container got held at Chennai
+port for customs re-inspection and we're now looking at roughly 12 days of delay
+from the date we originally promised. Sorry about this, completely outside our
+control. We may be able to ship a partial lot of around 150 units by air if you
+want to pay the freight difference, let us know.
+
+The HEPA cartridges on the same PO are fine and will leave on schedule.
+
+Regards,
+Anil
+Orion Components Ltd
