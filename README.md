@@ -123,7 +123,12 @@ ERP and Shopify connectors, live carrier and port-tracking APIs for proactive de
 
 ## Team
 
-Add your team name and members here.
+Team STELLARIS
+
+Harshit Mishra 
+Manas Rai
+Himani Chaudhary 
+Pratiksha Patil
 
 ## License
 
